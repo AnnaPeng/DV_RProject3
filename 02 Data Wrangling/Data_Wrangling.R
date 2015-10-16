@@ -13,12 +13,11 @@ djia <- data.frame(fromJSON(getURL(URLencode('129.152.144.84:5001/rest/native/?q
 djia
 
 #Inner Join & Its Data Wrangling
-dplyr::inner_join(nasq, djia, by="DATE_1")  %>% tbl_df
-tbl_df %>% select(VALUE_NASQ, VALUE_DJIA) %>% filter(VALUE_NASQ>=1500, VALUE_DJIA>=8000) %>% ggplot(aes(x = DATE_1, y = VALUE_NASQ)) + geom_point()
+df <- data.frame(dplyr::inner_join(nasq, djia, by="DATE_1"))
+df %>% select(VALUE_NASQ, DATE_1) %>% filter(VALUE_NASQ>=1500) %>% ggplot(aes(x = DATE_1, y = VALUE_NASQ)) + geom_line()
 
 #Outer Join
-outerJoin <- dplyr::full_join(nasq, djia, by="DATE_1")
-outerJoin
+df1 <- data.frame(dplyr::full_join(nasq, djia, by="DATE_1"))
 
 #Extra data wrangling
 
