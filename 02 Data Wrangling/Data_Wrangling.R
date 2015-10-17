@@ -29,7 +29,6 @@ df1 %>% select(DEPARTMENT_NAME.x, GENDER, HIREDATE) %>% arrange(HIREDATE) %>% gg
 #Combining data sets and its data wrangling
 baltimore <- data.frame(fromJSON(getURL(URLencode('129.152.144.84:5001/rest/native/?query="select * from BALTIMORE_EMPLOYEE_SALARIES14"'),httpheader=c(DB='jdbc:oracle:thin:@129.152.144.84:1521/PDBF15DV.usuniversi01134.oraclecloud.internal', USER='cs329e_bth679', PASS='orcl_bth679', MODE='native_mode', MODEL='model', returnDimensions = 'False', returnFor = 'JSON'), verbose = TRUE), ))
 
-baltimore %>% select(CURRENT_ANNUAL_SALARY)
 df2 <- data.frame(dplyr::bind_cols(florida, sample_n(baltimore, 9100)))
 
 df2 %>% select(DEPARTMENT, GENDER) %>% filter(DEPARTMENT %in% c("POL", "HHS")) %>% ggplot(aes(x = DEPARTMENT)) + geom_bar() + facet_grid(.~GENDER)+ labs(x="Department", y= "Count") + ggtitle("Comparison DEPARTMENTS VS. GENDERS")
