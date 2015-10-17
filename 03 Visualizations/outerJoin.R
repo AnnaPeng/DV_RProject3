@@ -1,0 +1,2 @@
+df1 <- data.frame(dplyr::full_join(florida, baltimore, by="CURRENT_ANNUAL_SALARY"))
+df1 %>% select(DEPARTMENT_NAME.x, GENDER, HIREDATE) %>% arrange(HIREDATE) %>% ggplot(aes(x = DEPARTMENT_NAME.x, y = as.character(as.numeric(HIREDATE)), color = GENDER)) + theme(axis.text.x = element_text(angle = 90, hjust = 1)) + geom_point() + labs(x="Department Name", y= "Hiring Date") + ggtitle("Amount of Employees got hired for each Department in 2014")

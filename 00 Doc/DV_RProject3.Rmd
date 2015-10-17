@@ -2,8 +2,75 @@
 title: "DV_Project3"
 author: "Panyu Peng - pp9774 & Bryan Ho - bth679"
 date: "October 16, 2015"
-output: html_document
+output: 
+  html_document:
+    pandoc_args: [
+      "+RTS", "-K64m",
+      "-RTS"
+    ]
 ---
+
 This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
 
 When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+#Before loading the datas from Oracle, We are going to source these packages below
+```{r}
+require("jsonlite")
+require("RCurl")
+require("dplyr")
+require("ggplot2")
+require("knitr")
+require("dplyr")
+require("extrafont")
+```
+  
+#Now, we are getting the CVS data from oracle. The data is about the Baltimore's employees salaries in 2014.  
+#Also, we are going to provide the summary and subset of this data
+```{r}
+# Change the USER and PASS below to be your UTEid
+baltimore <- data.frame(fromJSON(getURL(URLencode('129.152.144.84:5001/rest/native/?query="select * from BALTIMORE_EMPLOYEE_SALARIES14"'),httpheader=c(DB='jdbc:oracle:thin:@129.152.144.84:1521/PDBF15DV.usuniversi01134.oraclecloud.internal', USER='cs329e_bth679', PASS='orcl_bth679', MODE='native_mode', MODEL='model', returnDimensions = 'False', returnFor = 'JSON'), verbose = TRUE), ))
+summary(baltimore)
+head(baltimore)
+```
+  
+#And next, we are getting the data of Florida's employees salaries in 2014 from oracle. This data has already been used from the previous project.  
+#However, we are still going to provide the summary and subset of this data.
+```{r}
+florida <- data.frame(fromJSON(getURL(URLencode('129.152.144.84:5001/rest/native/?query="select * from EMPLOYEE_SALARIES_20142"'),httpheader=c(DB='jdbc:oracle:thin:@129.152.144.84:1521/PDBF15DV.usuniversi01134.oraclecloud.internal', USER='cs329e_bth679', PASS='orcl_bth679', MODE='native_mode', MODEL='model', returnDimensions = 'False', returnFor = 'JSON'), verbose = TRUE), ))
+summary(florida)
+head(florida)
+```
+    
+#Inner Join & Its Data Wrangling
+```{r}
+source("../03 Visualizations/innerJoin.R", echo = TRUE)
+```
+  
+##Observations: 
+###From this plot, we see that the job position that got the highest annual salary in 2014 was County Executive, which was approximately equal to $190,000. We also know that the Principal Administrative Aide position got the lowest annual salary. Overall, the average of annual salary that all jobs positions was about $65,000 to $70,000 and slightly differences between female and male, but nothing significant.
+  
+  
+#Outer Join & Its Data Wrangling
+
+```{r}
+
+source("../03 Visualizations/outerJoin.R", echo = TRUE)
+
+```
+
+##Observations: 
+
+###From this plot, we observe that the department that employees got hired the most in 2014 was states attorneys office, and most of them were female. Also, there are several departments that not many employees got hired, which were FIN-Purchasing, Fire Department, COMP-Comptrollers O, Planning Department, and Liquor License Board.
+  
+  
+#Combining data sets and its data wrangling
+```{r}
+
+source("../03 Visualizations/combineData.R", echo = TRUE)
+
+```
+  
+##Observation: 
+
+###According to this plot, we can see that the department of health and human services tends to have more female than the department of police. And there are more male in department of police than the department of health and human services. It does makes sense to see this result because most of police's jobs are dangerous, so male fits better for these position. In the other hand, female can takes care for others better than male. So, this plot does give us a very accurate observation that we hoped for.
